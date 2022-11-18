@@ -27,10 +27,12 @@ public class GameManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             if (uiManager == null) { uiManager = UIManager.Instance; }
-
             if (hoveredUnit == null) { return; }
             selectedUnit = hoveredUnit;
-            uiManager.targetPanel.gameObject.SetActive(true);
+
+            uiManager.UpdateEffectUI(selectedUnit.resourceSystem.currentEffects);
+
+            TargetPanelState(true);
             UpdateUI();
            
         }
@@ -54,14 +56,19 @@ public class GameManager : MonoBehaviour
         ResourceSystem resourceSystem = PlayerController.Instance.GetComponent<ResourceSystem>();
 
         //Player
-        uiManager.playerHealth.fillAmount = resourceSystem.GetHealthDecimal();
+        uiManager.playerHealth.fillAmount = resourceSystem.GetHealthDecimal(); 
         uiManager.playerResource.fillAmount = resourceSystem.GetResourceDecimal();
 
         //Target
         uiManager.targetText.text = selectedUnit.unitName;
         uiManager.targetHealth.fillAmount = selectedUnit.resourceSystem.GetHealthDecimal();
         uiManager.targetResource.fillAmount = selectedUnit.resourceSystem.GetResourceDecimal();
+    }
 
+    public void TargetPanelState(bool targetPanelState)
+    {
+        if (targetPanelState) { uiManager.targetPanel.gameObject.SetActive(true); }
+        else { uiManager.targetPanel.gameObject.SetActive(false); }
     }
 
 }

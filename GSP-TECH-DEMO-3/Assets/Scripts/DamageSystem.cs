@@ -5,14 +5,28 @@ using UnityEngine;
 
 public class DamageSystem : MonoBehaviour
 {
-    protected int damageAmount;
-    protected LayerMask damageLayers;
+    public static DamageSystem Instance; 
+    private void Awake() => Instance = this;
 
-    protected void DoDamage(Collider2D collision)
+    public void Damage(GameObject collision, float damageAmount)
     {
-        if (!((damageLayers.value & (1 << collision.gameObject.layer)) > 0)) { return; }
         if (collision.TryGetComponent(out ResourceSystem resourceSystem)) { resourceSystem.ReduceHealth(damageAmount); }
     }
-    protected float GetDistanceFromTarget(Vector2 target) { return Vector2.Distance(transform.position, target); }
+
+    public void CircleDamage(Collider2D collision, int damageAmount, int damageSize, LayerMask damageLayers)
+    {
+
+    }
+
+    public void Heal(GameObject collision, float healAmount)
+    {
+        if (collision.TryGetComponent(out ResourceSystem resourceSystem)) { resourceSystem.IncreaseHealth(healAmount); }
+    }
+
+
+
+
+    //public float GetDistance(Vector2 currentPosition, Vector2 targetPosition) 
+    //{ return Vector2.Distance(currentPosition, targetPosition); }
 
 }

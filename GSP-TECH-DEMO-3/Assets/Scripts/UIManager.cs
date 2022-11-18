@@ -1,11 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    public Image[] abilitySprites = new Image[4];
+
+    public GameObject uiCanvas;
+
     public Image playerPanel;
     public Image targetPanel;
 
@@ -17,7 +23,23 @@ public class UIManager : MonoBehaviour
 
     public TextMeshProUGUI targetText;
 
+    public Image castingBar;
+
+    public Image[] abilityCooldowns = new Image[4];
+
+    [Header("EFFECTS")]
+    public GameObject defaultEffect;
+
+    public float positionOffset;
+    public RectTransform effectPositionTarget;
+    public RectTransform effectPositionPlayer;
+
+    public List<GameObject> targetEffects = new List<GameObject>();
+    public List<GameObject> playerEffects = new List<GameObject>();
+
     public static UIManager Instance;
+
+    private float _currentOffset;
 
     private void Start()
     {
@@ -25,6 +47,59 @@ public class UIManager : MonoBehaviour
 
         playerPanel.gameObject.SetActive(true);
         targetPanel.gameObject.SetActive(false);
+    }
+
+    public void UpdateCastingValue(float fillAmount)
+    {
+        castingBar.fillAmount = fillAmount;
+    }
+
+    public void SetCastingBar(bool value)
+    {
+        GameObject castingBarObject = castingBar.gameObject.transform.parent.gameObject;
+
+        if (value) { castingBarObject.SetActive(true); }
+        else { castingBarObject.SetActive(false);  }
+    }
+
+    public void SetCooldown(int cooldownSlot, float fillAmount)
+    {
+        abilityCooldowns[cooldownSlot].fillAmount = fillAmount;
+    }
+
+    public void UpdateEffectUI(List<Effect> currentEffects)
+    {
+        ClearTargetUI();
+        targetEffects.Clear();
+
+        _currentOffset = -positionOffset;
+
+        for (int i = 0; i < currentEffects.Count; i++)
+        {
+            _currentOffset += positionOffset;
+
+            GameObject effectUI = Instantiate(defaultEffect, uiCanvas.transform);
+            effectUI.transform.position = new Vector2(effectUI.transform.position.x + _currentOffset, effectUI.transform.position.y);
+            effectUI.transform.GetChild(0).GetComponent<Image>().color = currentEffects[i]._effectColor;
+            targetEffects.Add(effectUI);
+        }
+    }
+
+    public void ClearTargetUI()
+    {
+        foreach (GameObject item in targetEffects)
+        { Destroy(item); }
+    }
+
+    public void ClearPlayerUI()
+    { foreach (GameObject item in playerEffects) { Destroy(item); } }
+
+    public void SetAbilitySprites(Sprite spriteOne, Sprite spriteTwo, Sprite spriteThree, Sprite spriteFour)
+    {
+        abilitySprites[0].sprite = spriteOne;
+        abilitySprites[1].sprite = spriteTwo;
+        abilitySprites[2].sprite = spriteThree;
+        abilitySprites[3].sprite = spriteFour;
     }
 
 }

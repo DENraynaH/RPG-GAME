@@ -12,5 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40987d879e3cb134d8f4babc5c45c5bf, type: 3}
   m_Name: Wrath Ability
   m_EditorClassIdentifier: 
+  <castingTime>k__BackingField: 2
+  <abilityCooldown>k__BackingField: 5
+  <abilitySprite>k__BackingField: {fileID: 0}
+  <abilityValue>k__BackingField: 20
   wrathProjectile: {fileID: 3498755719754253692, guid: 4225c89b94c80e14ba46384a2fe126ee, type: 3}
-  wrathSpeed: 2
+  wrathSpeed: 4

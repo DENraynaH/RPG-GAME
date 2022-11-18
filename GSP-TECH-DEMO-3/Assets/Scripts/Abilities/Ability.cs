@@ -3,15 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Ability :  ScriptableObject 
+public abstract class Ability : ScriptableObject
 {
-    protected float castingTime;
-    protected float abilityCooldown;
-    protected Sprite abilitySprite;
+    [field:Header("Ability Stats")]
+    [field:SerializeField] public float castingTime { get; private set; }
+    [field:SerializeField] public float abilityCooldown { get; private set; }
+    [field:SerializeField] public Sprite abilitySprite { get; private set; }
+    [field:SerializeField] public int abilityValue { get; private set; }
 
     protected enum AbilityType { afterCast, duringCast }
     protected AbilityType abilityType = AbilityType.afterCast;
 
     public abstract IEnumerator Activate(GameUnit playerUnit, GameUnit targetUnit);
-
 }

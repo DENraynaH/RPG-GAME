@@ -8,7 +8,6 @@ public class PlayerMovement : MonoBehaviour
     private MoveDirection moveDirection;
 
     [SerializeField] private float playerSpeed;
-
     private void Update()
     {
         if (Input.GetKey(KeyCode.W)) { moveDirection = MoveDirection.UP; }
@@ -20,7 +19,6 @@ public class PlayerMovement : MonoBehaviour
         //Debug
         if (Input.GetKeyDown(KeyCode.F1)) { GetComponent<ResourceSystem>().ReduceHealth(10); }
         if (Input.GetKeyDown(KeyCode.F2)) { GetComponent<ResourceSystem>().ReduceResource(10); }
-
     }
 
     private void FixedUpdate()
