@@ -10,6 +10,11 @@ public abstract class Ability : ScriptableObject
     [field:SerializeField] public float abilityCooldown { get; private set; }
     [field:SerializeField] public Sprite abilitySprite { get; private set; }
     [field:SerializeField] public int abilityValue { get; private set; }
+    [field: SerializeField] public float resourceCost { get; private set; }
+    public enum CastType { SelfOnly, EnemyOnly, Both }
+    [field: SerializeField] public CastType castType { get; private set; }
+
+
 
     protected enum AbilityType { afterCast, duringCast }
     protected AbilityType abilityType = AbilityType.afterCast;

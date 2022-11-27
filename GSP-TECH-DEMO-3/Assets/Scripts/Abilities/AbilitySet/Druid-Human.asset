@@ -19,8 +19,8 @@ MonoBehaviour:
     ability: {fileID: 11400000, guid: de90d937fb6c0e34e91470e9af5c8083, type: 2}
     sprite: {fileID: 21300000, guid: 313c7f7b27e3bca46ab5af47bcdadd2b, type: 3}
   abilityThree:
-    ability: {fileID: 0}
+    ability: {fileID: 11400000, guid: 896515c7fb526e544bd1dc6d7b5b17bb, type: 2}
     sprite: {fileID: 21300000, guid: 02db0df7aeaa1104eb9c6a0d78a30cc8, type: 3}
   abilityFour:
-    ability: {fileID: 0}
+    ability: {fileID: 11400000, guid: 99a3cbee501494b4a930d38607655183, type: 2}
     sprite: {fileID: 21300000, guid: 5f5dcdcf7d2329346be9ed1446f26d56, type: 3}

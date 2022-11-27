@@ -16,3 +16,6 @@ MonoBehaviour:
   <abilityCooldown>k__BackingField: 5
   <abilitySprite>k__BackingField: {fileID: 0}
   <abilityValue>k__BackingField: 5
+  <resourceCost>k__BackingField: 0
+  <castType>k__BackingField: 1
+  moonfireVisuals: {fileID: 6628539181202240384, guid: e58350634b382fa4a9366c6e6a6ce380, type: 3}

@@ -1,46 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    private enum MoveDirection { LEFT, RIGHT, UP, DOWN, NONE}
-    private MoveDirection moveDirection;
+    public PlayerInput playerInput { get; private set; }
+    public Vector2 moveDirection { get; private set; }
 
-    [SerializeField] private float playerSpeed;
+    public float playerSpeed;
+
+    private void Start()
+    {
+        playerInput = GetComponent<PlayerInput>();
+    }
+
     private void Update()
     {
-        if (Input.GetKey(KeyCode.W)) { moveDirection = MoveDirection.UP; }
-        else if (Input.GetKey(KeyCode.A)) { moveDirection = MoveDirection.LEFT; }
-        else if (Input.GetKey(KeyCode.S)) { moveDirection = MoveDirection.DOWN; }
-        else if (Input.GetKey(KeyCode.D)) { moveDirection = MoveDirection.RIGHT; }
-        else { moveDirection = MoveDirection.NONE; }
+        Vector2 input = playerInput.actions["Move"].ReadValue<Vector2>();
+        moveDirection = new Vector2 (input.x, input.y);
 
-        //Debug
-        if (Input.GetKeyDown(KeyCode.F1)) { GetComponent<ResourceSystem>().ReduceHealth(10); }
-        if (Input.GetKeyDown(KeyCode.F2)) { GetComponent<ResourceSystem>().ReduceResource(10); }
+        //if (moveDirection.y == 0) { animator.Play("anim-die"); }
+        //else if (moveDirection.y > Mathf.Epsilon) { animator.Play("anim-walk-2"); facingUp = false; }
+        //else if (moveDirection.y < Mathf.Epsilon) { animator.Play("anim-walk-1"); facingUp = true; }
     }
 
     private void FixedUpdate()
     {
         Rigidbody2D rigidbody = PlayerController.Instance.playerBody;
-        switch (moveDirection)
-        {
-            case MoveDirection.LEFT:
-                rigidbody.velocity = new Vector2(-playerSpeed, 0);
-                break;
-            case MoveDirection.RIGHT:
-                rigidbody.velocity = new Vector2(playerSpeed, 0);
-                break;
-            case MoveDirection.UP:
-                rigidbody.velocity = new Vector2(0, playerSpeed);
-                break;
-            case MoveDirection.DOWN:
-                rigidbody.velocity = new Vector2(0, -playerSpeed);
-                break;
-            case MoveDirection.NONE:
-                rigidbody.velocity = Vector2.zero;
-                break;
-        }
+        rigidbody.velocity = moveDirection * playerSpeed;
     }
 }

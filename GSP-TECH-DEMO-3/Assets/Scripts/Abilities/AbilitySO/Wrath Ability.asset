@@ -16,5 +16,7 @@ MonoBehaviour:
   <abilityCooldown>k__BackingField: 5
   <abilitySprite>k__BackingField: {fileID: 0}
   <abilityValue>k__BackingField: 20
+  <resourceCost>k__BackingField: 50
+  <castType>k__BackingField: 1
   wrathProjectile: {fileID: 3498755719754253692, guid: 4225c89b94c80e14ba46384a2fe126ee, type: 3}
   wrathSpeed: 4

@@ -67,6 +67,12 @@ public class UIManager : MonoBehaviour
         abilityCooldowns[cooldownSlot].fillAmount = fillAmount;
     }
 
+    public void SetEffectCooldown(Effect effect, float fillAmount)
+    {
+        Image cooldownImage = effect._effectObjectUI.transform.GetChild(1).GetComponent<Image>();
+        cooldownImage.fillAmount = fillAmount;
+    }
+
     public void UpdateEffectUI(List<Effect> currentEffects)
     {
         ClearTargetUI();
@@ -79,9 +85,32 @@ public class UIManager : MonoBehaviour
             _currentOffset += positionOffset;
 
             GameObject effectUI = Instantiate(defaultEffect, uiCanvas.transform);
-            effectUI.transform.position = new Vector2(effectUI.transform.position.x + _currentOffset, effectUI.transform.position.y);
-            effectUI.transform.GetChild(0).GetComponent<Image>().color = currentEffects[i]._effectColor;
+            effectUI.transform.position = new Vector2(effectPositionTarget.transform.position.x + _currentOffset, effectPositionTarget.transform.position.y);
+            effectUI.transform.SetParent(targetPanel.gameObject.transform);
+            effectUI.transform.GetChild(0).GetComponent<Image>().sprite = currentEffects[i]._effectSprite;
+            currentEffects[i]._effectObjectUI = effectUI;
+
+            StartCoroutine(EffectTools.DoCooldown(currentEffects[i], currentEffects[i]._effectDuration, currentEffects[i]._currentDuration));
             targetEffects.Add(effectUI);
+        }
+    }
+
+    public void UpdatePlayerEffectUI(List<Effect> currentEffects)
+    {
+        ClearPlayerUI();
+        playerEffects.Clear();
+        _currentOffset = -positionOffset;
+
+        for (int i = 0; i < currentEffects.Count; i++)
+        {
+            GameObject effectUI = Instantiate(defaultEffect, uiCanvas.transform);
+            effectUI.transform.position = new Vector2(effectPositionPlayer.transform.position.x + _currentOffset, effectPositionPlayer.transform.position.y);
+            effectUI.transform.GetChild(0).GetComponent<Image>().sprite = currentEffects[i]._effectSprite;
+            effectUI.transform.localScale = new Vector2(0.5f, 0.5f);
+            currentEffects[i]._effectObjectUI = effectUI;
+
+            StartCoroutine(EffectTools.DoCooldown(currentEffects[i], currentEffects[i]._effectDuration, currentEffects[i]._currentDuration));
+            playerEffects.Add(effectUI);
         }
     }
 
@@ -90,7 +119,6 @@ public class UIManager : MonoBehaviour
         foreach (GameObject item in targetEffects)
         { Destroy(item); }
     }
-
     public void ClearPlayerUI()
     { foreach (GameObject item in playerEffects) { Destroy(item); } }
 
@@ -100,6 +128,24 @@ public class UIManager : MonoBehaviour
         abilitySprites[1].sprite = spriteTwo;
         abilitySprites[2].sprite = spriteThree;
         abilitySprites[3].sprite = spriteFour;
+    }
+
+    public void UpdateUI(GameUnit gameUnit)
+    {
+        ResourceSystem resourceSystem = PlayerController.Instance.resourceSystem;
+
+        playerHealth.fillAmount = resourceSystem.GetHealthDecimal();
+        playerResource.fillAmount = resourceSystem.GetResourceDecimal();
+
+        targetText.text = gameUnit.unitStats.unitName;
+        targetHealth.fillAmount = gameUnit.resourceSystem.GetHealthDecimal();
+        targetResource.fillAmount = gameUnit.resourceSystem.GetResourceDecimal();
+    }
+
+    public void TargetPanelState(bool targetPanelState)
+    {
+        if (targetPanelState) { targetPanel.gameObject.SetActive(true); }
+        else { targetPanel.gameObject.SetActive(false); }
     }
 
 }

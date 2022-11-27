@@ -7,14 +7,19 @@ using UnityEngine;
 public abstract class Effect
 {
     public float _currentDuration;
-
     public float _effectDuration;
-    //public Sprite _effectSprite;
+
+    public GameObject _effectObjectUI;
+
     public Color _effectColor;
+    public Sprite _effectSprite;
     public float _effectValue;
+
+    public Ability _abilityFrom;
 
     public Action<Effect, GameUnit> effectStart;
     public Action<Effect, GameUnit> effectEnd;
 
-    public abstract IEnumerator Apply(GameUnit gameUnit);
+    public abstract IEnumerator Apply(GameUnit reciver, GameUnit giver);
+    public abstract void Reset();
 }

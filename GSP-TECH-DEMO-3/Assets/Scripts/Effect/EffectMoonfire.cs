@@ -4,31 +4,37 @@ using UnityEngine;
 
 public class EffectMoonfire : Effect
 {
-    [SerializeField] private float _tickDuration; 
+    [SerializeField] private float _tickRate; 
 
-    public override IEnumerator Apply(GameUnit gameUnit) 
+    public override IEnumerator Apply(GameUnit EffectReciver, GameUnit EffectGiver) 
     {
-        _currentDuration = _effectDuration;
-        float currentDuration = 0;
+        _currentDuration = 0;
+        _tickRate = 2;
 
-        effectStart?.Invoke(this, gameUnit);
-        while (currentDuration < _currentDuration)
+        effectStart?.Invoke(this, EffectReciver);
+        while (_currentDuration < _effectDuration)
         {
-            yield return new WaitForSeconds(_tickDuration);
-            DamageSystem.Instance.Damage(gameUnit.gameObject, _effectValue);
-            currentDuration += _tickDuration;
-
-            Debug.Log($"Current End Duration: {_currentDuration} Current Duration: {currentDuration}");
+            _currentDuration += Time.deltaTime;
+            if (_currentDuration >= _tickRate)
+            {
+                DamageSystem.Instance.Damage(EffectGiver, EffectReciver, _effectValue);
+                _tickRate += 2;
+                Debug.Log($"Current End Duration: {_effectDuration} Current Duration: {_currentDuration}");
+            }
+            yield return null;
         }
-        effectEnd?.Invoke(this, gameUnit);
+        effectEnd?.Invoke(this, EffectReciver);
     }
 
-    public EffectMoonfire(float effectDuration, Color effectColor, float effectValue, float tickDuration)
+    public override void Reset() { _tickRate = 2; }
+
+    public EffectMoonfire(float effectDuration, Color effectColor, float effectValue, float tickDuration, Sprite sprite)
     {
         _effectDuration = effectDuration;
         _effectColor = effectColor;
         _effectValue = effectValue;
-        _tickDuration = tickDuration;   
+        _tickRate = tickDuration;
+        _effectSprite = sprite;
     }
 
 }
